@@ -71,25 +71,22 @@ defmodule Phorn do
     Enum.random(MapSet.difference(superset, Blacklist.get(pos, str)))
   end
 
-  def bulk_gen(maxlen, count, list, inspect_every \\ 1000)
+  def bulk_gen(maxlen, count, cumulative \\ MapSet.new([]), inspect_every \\ 1000)
 
-  def bulk_gen(maxlen, count, list, inspect_every) when count > 0 do
+  def bulk_gen(maxlen, count, cumulative, inspect_every) when count > 0 do
     next = string(maxlen)
-    list = [ next | list ]
-    if rem(length(list),inspect_every) == 0 do
-      IO.puts "#{length(list)} #{next}"
-      dups = list -- Enum.uniq(list)
-      if length(dups) > 0 do
-        [ first_dup | _ ] = dups
-        position = Enum.find_index(Enum.reverse(list), fn x -> x == first_dup end)
-        raise "Dups found at #{position} : #{dups}"
-      end
+    if MapSet.member?(cumulative,next) do
+      raise "Dup found in set of #{MapSet.size(cumulative)}: #{next}"
     end
-    bulk_gen(maxlen, count-1, list, inspect_every)
+    cumulative = MapSet.put(cumulative,next)
+    if rem(MapSet.size(cumulative),inspect_every) == 0 do
+      IO.puts "#{MapSet.size(cumulative)} #{next}"
+    end
+    bulk_gen(maxlen, count-1, cumulative, inspect_every)
   end
 
-  def bulk_gen(_, count, list, _) when count <= 0 do
-    list
+  def bulk_gen(_, count, cumulative, _) when count <= 0 do
+    cumulative
   end
 end
 
