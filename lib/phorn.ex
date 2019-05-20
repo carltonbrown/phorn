@@ -1,5 +1,13 @@
 defmodule Phorn do
 
+  @on_load :seed_random
+
+  def seed_random do
+    << i1 :: unsigned-integer-32, i2 :: unsigned-integer-32, i3 :: unsigned-integer-32>> = :crypto.strong_rand_bytes(12)
+    :rand.seed(:exsplus, {i1, i2, i3})
+    :ok
+  end
+
   def charset(:all) do
     MapSet.new(?a..?z)
   end
