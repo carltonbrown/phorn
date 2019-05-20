@@ -31,23 +31,18 @@ defmodule Phorn do
 
   def string(acc, maxlen, length) when length < maxlen do
     current = String.last(acc)
-    # If last n chars are consonants, next should be a random vowel
-    # If last n chars are vowels, next should be a random consonant
+    # If last n chars are consonants, next should be a vowel
+    # If last n chars are vowels, next should be a consonant
     n = 2 
     last_n = String.graphemes(String.slice(acc, -n..-1))
     num_vowels = length(Enum.filter(last_n, fn x -> Enum.member?(chars(:vowels), x) end))
     num_consonants = length(Enum.filter(last_n, fn x -> Enum.member?(chars(:consonants), x) end))
     appendage = cond do
       num_vowels >= 2 ->
-        # TODO this should be "consonant following last" not random
-        # Enum.random(chars(:consonants))
         follows(current, position_at(acc, maxlen), :consonants) 
       num_consonants >= 2 ->
-        # TODO this should be "vowel following last" not random
-        #Enum.random(chars(:vowels))
         follows(current, position_at(acc, maxlen), :vowels) 
       num_vowels < 2 && num_consonants < 2 ->
-        # follows(current, position_at(acc, maxlen)) 
         follows(current, position_at(acc, maxlen), :all) 
     end
 
