@@ -18,8 +18,6 @@ defmodule Phorn do
   end
 
   def position_at(acc, maxlen) do
-    require IEx;
-    #  IEx.pry 
     count = length(acc)
     cond do
       count == 1 or maxlen == 2 -> 
@@ -39,17 +37,17 @@ defmodule Phorn do
     last_n = Enum.slice(acc,0..n)
     num_vowels = length(Enum.filter(last_n, fn x -> Enum.member?(charset(:vowels), x) end))
     num_consonants = length(Enum.filter(last_n, fn x -> Enum.member?(charset(:consonants), x) end))
-    prependage = cond do
+    position = position_at(acc, maxlen)
+    kind = cond do
       num_vowels >= 2 ->
-        follows(current, position_at(acc, maxlen), :consonants) 
+        :consonants
       num_consonants >= 2 ->
-        follows(current, position_at(acc, maxlen), :vowels) 
+        :vowels
       num_vowels < 2 && num_consonants < 2 ->
-        follows(current, position_at(acc, maxlen), :all) 
+        :all
     end
-
-    acc = [ prependage | acc ]
-    require IEx; IEx.pry
+    next = follows(current, position, kind) 
+    acc = [ next | acc ]
     get_chars(acc, maxlen, length(acc))
   end
 
@@ -69,9 +67,11 @@ defmodule Phorn do
   end
 
   # when pos in :initial, sequential, final
-  def follows(str, pos, kind) do
+  def follows(char, pos, kind) do
     superset = charset(kind)
-    Enum.random(MapSet.difference(superset, Blacklist.get(pos, str)))
+    blacklist = Blacklist.get(pos, char)
+    allowed = MapSet.difference(superset, blacklist)
+    Enum.random(allowed)
   end
 
   def bulk_gen(maxlen, count, cumulative \\ MapSet.new([]), inspect_every \\ 1000)
@@ -79,6 +79,7 @@ defmodule Phorn do
   def bulk_gen(maxlen, count, cumulative, inspect_every) when count > 0 do
     next = string(maxlen)
     if MapSet.member?(cumulative,next) do
+      require IEx; IEx.pry
       raise "Dup found in set of #{MapSet.size(cumulative)}: #{next}"
     end
     cumulative = MapSet.put(cumulative,next)
