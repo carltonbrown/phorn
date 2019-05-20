@@ -8,23 +8,23 @@ defmodule PhornTest do
   end
 
   test "detects initial position when maxlen = len = 1" do
-    assert Phorn.position_at("q", 1) == :initial
+    assert Phorn.position_at('q', 1) == :initial
   end
 
   test "detects the initial position when maxlen is 2" do
-    assert Phorn.position_at("q", 2) == :initial
+    assert Phorn.position_at('q', 2) == :initial
   end
 
   test "detects the initial position when maxlen is > 2" do
-    assert Phorn.position_at("q", 3) == :initial
+    assert Phorn.position_at('q', 3) == :initial
   end
 
   test "detects the sequential position" do
-    assert Phorn.position_at("nn", 4) == :sequential
+    assert Phorn.position_at('nn', 4) == :sequential
   end
 
   test "detects the final position" do
-    assert Phorn.position_at("nnn", 4) == :final
+    assert Phorn.position_at('nnn', 4) == :final
   end
 
   test "meets percent uniq" do

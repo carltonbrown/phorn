@@ -1,24 +1,26 @@
 defmodule Phorn do
 
-  def chars(:all) do
-    MapSet.new(Enum.map(?a..?z, fn x -> << x :: utf8 >> end))
+  def charset(:all) do
+    MapSet.new(?a..?z)
   end
 
-  def chars(:vowels) do
-    MapSet.new(String.graphemes("aeiouy"))
+  def charset(:vowels) do
+    MapSet.new('aeiouy')
   end
 
-  def chars(:consonants) do
-    MapSet.difference(chars(:all), chars(:vowels))
+  def charset(:consonants) do
+    MapSet.difference(charset(:all), charset(:vowels))
   end
 
   def string(maxlen) do
-    acc = Enum.random(chars(:all))
-    string(acc, maxlen, String.length(acc))
+    acc = [Enum.random(charset(:all))]
+    get_chars(acc, maxlen, length(acc))
   end
 
   def position_at(acc, maxlen) do
-    count = String.length(acc)
+    require IEx;
+    #  IEx.pry 
+    count = length(acc)
     cond do
       count == 1 or maxlen == 2 -> 
         :initial
@@ -29,15 +31,15 @@ defmodule Phorn do
     end
   end
 
-  def string(acc, maxlen, length) when length < maxlen do
-    current = String.last(acc)
+  def get_chars(acc, maxlen, length) when length < maxlen do
+    current = List.first(acc)
     # If last n chars are consonants, next should be a vowel
     # If last n chars are vowels, next should be a consonant
     n = 2 
-    last_n = String.graphemes(String.slice(acc, -n..-1))
-    num_vowels = length(Enum.filter(last_n, fn x -> Enum.member?(chars(:vowels), x) end))
-    num_consonants = length(Enum.filter(last_n, fn x -> Enum.member?(chars(:consonants), x) end))
-    appendage = cond do
+    last_n = Enum.slice(acc,0..n)
+    num_vowels = length(Enum.filter(last_n, fn x -> Enum.member?(charset(:vowels), x) end))
+    num_consonants = length(Enum.filter(last_n, fn x -> Enum.member?(charset(:consonants), x) end))
+    prependage = cond do
       num_vowels >= 2 ->
         follows(current, position_at(acc, maxlen), :consonants) 
       num_consonants >= 2 ->
@@ -46,12 +48,13 @@ defmodule Phorn do
         follows(current, position_at(acc, maxlen), :all) 
     end
 
-    acc = acc <> appendage
-    string(acc, maxlen, String.length(acc))
+    acc = [ prependage | acc ]
+    require IEx; IEx.pry
+    get_chars(acc, maxlen, length(acc))
   end
 
-  def string(acc, maxlen, length) when length == maxlen do
-    acc
+  def get_chars(acc, maxlen, length) when length == maxlen do
+    to_string(Enum.reverse(acc))
   end
 
   def tuple(tuple_count, tuple_size, tuples \\ [])
@@ -67,7 +70,7 @@ defmodule Phorn do
 
   # when pos in :initial, sequential, final
   def follows(str, pos, kind) do
-    superset = chars(kind)
+    superset = charset(kind)
     Enum.random(MapSet.difference(superset, Blacklist.get(pos, str)))
   end
 
@@ -89,4 +92,3 @@ defmodule Phorn do
     cumulative
   end
 end
-
