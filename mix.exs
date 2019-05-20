@@ -22,6 +22,7 @@ defmodule Phorn.MixProject do
   defp deps do
     [
       {:number, "~> 1.0.0"},
+      {:exprof, "~> 0.2.3"},
     ]
   end
 end
