@@ -1,7 +1,7 @@
 defmodule Phorn do
 
   def chars(:all) do
-    MapSet.new(for n <- ?a..?z, do: << n :: utf8 >>)
+    MapSet.new(Enum.map(?a..?z, fn x -> << x :: utf8 >> end))
   end
 
   def chars(:vowels) do
