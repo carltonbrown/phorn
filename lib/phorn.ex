@@ -20,9 +20,13 @@ defmodule Phorn do
     MapSet.difference(charset(:all), charset(:vowels))
   end
 
-  def string(maxlen) do
+  def reversed(maxlen) do
     acc = [Enum.random(charset(:all))]
     get_chars(acc, maxlen, length(acc))
+  end
+
+  def string(maxlen) do
+    to_string(Enum.reverse(reversed(maxlen)))
   end
 
   def position_at(acc, maxlen) do
@@ -45,7 +49,7 @@ defmodule Phorn do
     last_n = Enum.slice(acc,0..n)
     num_vowels = length(Enum.filter(last_n, fn x -> Enum.member?(charset(:vowels), x) end))
     num_consonants = length(Enum.filter(last_n, fn x -> Enum.member?(charset(:consonants), x) end))
-    position = position_at(acc, maxlen)
+    rule = position_at(acc, maxlen)
     kind = cond do
       num_vowels >= 2 ->
         :consonants
@@ -54,13 +58,13 @@ defmodule Phorn do
       num_vowels < 2 && num_consonants < 2 ->
         :all
     end
-    next = follows(current, position, kind) 
+    next = follows(current, rule, kind) 
     acc = [ next | acc ]
     get_chars(acc, maxlen, length(acc))
   end
 
   def get_chars(acc, maxlen, length) when length == maxlen do
-    to_string(Enum.reverse(acc))
+     acc
   end
 
   def tuple(tuple_count, tuple_size, tuples \\ [])
@@ -75,24 +79,21 @@ defmodule Phorn do
   end
 
   # when pos in :initial, sequential, final
-  def follows(char, pos, kind) do
-    superset = charset(kind)
-    blacklist = Blacklist.get(pos, char)
+  def follows(preceding, rule, kind_requested) do
+    superset = charset(kind_requested)
+    blacklist = Blacklist.get(rule, preceding)
     allowed = MapSet.difference(superset, blacklist)
     Enum.random(allowed)
   end
 
-  def bulk_gen(maxlen, count, cumulative \\ MapSet.new([]), inspect_every \\ 1000)
+  def bulk_gen(maxlen, count, cumulative \\ [], inspect_every \\ 1000)
 
   def bulk_gen(maxlen, count, cumulative, inspect_every) when count > 0 do
-    next = string(maxlen)
-    if MapSet.member?(cumulative,next) do
-      require IEx; IEx.pry
-      raise "Dup found in set of #{MapSet.size(cumulative)}: #{next}"
-    end
-    cumulative = MapSet.put(cumulative,next)
-    if rem(MapSet.size(cumulative),inspect_every) == 0 do
-      IO.puts "#{MapSet.size(cumulative)} #{next}"
+    next = reversed(maxlen)
+    cumulative = [ next | cumulative ]
+    if rem(length(cumulative),inspect_every) == 0 do
+      displayed = to_string(Enum.reverse(next))
+      IO.puts "#{length(cumulative)} #{displayed}"
     end
     bulk_gen(maxlen, count-1, cumulative, inspect_every)
   end
