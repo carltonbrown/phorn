@@ -28,7 +28,7 @@ defmodule PhornTest do
   end
 
   test "meets percent uniq" do
-    count = 1_000_000
+    count = 250000
     inspect_every = 5000
     phorns = Phorn.bulk_gen(9, count, [], inspect_every)
     pct_uniq = 100 * (length(Enum.uniq(phorns)) / length(phorns))
