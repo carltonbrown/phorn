@@ -28,12 +28,11 @@ defmodule PhornTest do
   end
 
   test "meets percent uniq" do
-    count = 10_000_000
+    count = 1_000_000
     inspect_every = 5000
-    # count = 10000
-    phorns = Phorn.bulk_gen(9, count, MapSet.new([]), inspect_every)
+    phorns = Phorn.bulk_gen(9, count, [], inspect_every)
     pct_uniq = 100 * (length(Enum.uniq(phorns)) / length(phorns))
     IO.puts "Percent uniq is #{pct_uniq}"
-    assert pct_uniq >= 99.99
+    assert pct_uniq >= 99.98
   end
 end
