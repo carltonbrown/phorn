@@ -26,7 +26,7 @@ defmodule Blacklist do
       ?x => 'abcdfgjklmnopqrtusvwxz',
       ?y => 'bcdfghjkmnopqtvwxyz',
       ?z => 'cfkjpqstvwx'
-    },
+    } |> Map.new(fn {k, v} -> {k, MapSet.new(v)} end),
     :sequential => %{
       ?b => 'qx',
       ?d => 'x',
@@ -47,7 +47,7 @@ defmodule Blacklist do
       ?x => 'gsz',
       ?y => 'hiqy',
       ?z => 'jsx'
-    },
+    } |> Map.new(fn {k, v} -> {k, MapSet.new(v)} end),
     :final => %{
       ?b => 'cjkpwv',
       ?c => 'bgjnqwv',
@@ -71,14 +71,14 @@ defmodule Blacklist do
       ?x => 'bcdefgjkpqsvwxz',
       ?y => 'chwxy',
       ?z => 's'
-    }
+    } |> Map.new(fn {k, v} -> {k, MapSet.new(v)} end)
   }
 
   def get(rule, char) when rule in [:initial, :sequential] do
-    MapSet.new(@blacklist[rule][char] || '')
+    @blacklist[rule][char] || MapSet.new('')
   end
 
   def get(:final, char) do
-    MapSet.union(get(:sequential, char), MapSet.new(@blacklist[:final][char] || ''))
+    MapSet.union(get(:sequential, char),@blacklist[:final][char] || MapSet.new(''))
   end
 end
