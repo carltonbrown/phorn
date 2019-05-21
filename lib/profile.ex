@@ -3,9 +3,9 @@ defmodule Profile do
 
   def go do
     profile do
-      count = 10000
-      inspect_every = 100
-      Phorn.bulk_gen(9, count, MapSet.new([]), inspect_every)
+      count = 500_000
+      inspect_every = 1000
+      Phorn.bulk_gen(9, count, [], inspect_every)
     end
   end 
 end
