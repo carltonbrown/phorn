@@ -29,7 +29,9 @@ defmodule Blacklist do
     } |> Map.new(fn {k, v} -> {k, MapSet.new(v)} end),
     :sequential => %{
       ?b => 'qx',
+      ?c => 'x',
       ?d => 'x',
+      ?f => 'vx',
       ?g => 'q',
       ?h => 'hqx',
       ?i => 'iwy',
