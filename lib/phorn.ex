@@ -43,17 +43,17 @@ defmodule Phorn do
 
   def get_chars(acc, maxlen, length) when length < maxlen do
     current = List.first(acc)
-    # If last n chars are consonants, next should be a vowel
-    # If last n chars are vowels, next should be a consonant
+    # If last n chars contain n consonants, next should be a vowel
+    # If last n chars contain n vowels, next should be a consonant
     n = 2 
-    last_n = Enum.slice(acc,0..n)
+    last_n = Enum.slice(acc,0..n-1)
     num_vowels = length(Enum.filter(last_n, fn x -> Enum.member?(charset(:vowels), x) end))
     num_consonants = length(Enum.filter(last_n, fn x -> Enum.member?(charset(:consonants), x) end))
     rule = position_at(acc, maxlen)
     kind = cond do
-      num_vowels >= 2 ->
+      num_vowels >= n ->
         :consonants
-      num_consonants >= 2 ->
+      num_consonants >= n ->
         :vowels
       num_vowels < 2 && num_consonants < 2 ->
         :all
