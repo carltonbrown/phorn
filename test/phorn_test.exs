@@ -37,14 +37,10 @@ defmodule PhornTest do
 
   @tag :skip
   test "uniqueness for 9-length strings\n" do
-    string_length = 9
-    sample_size = 500000
-    assert pct_uniq(string_length, sample_size) >= 99.999
+    assert pct_uniq(9, 500000) >= 99.999
   end
 
   test "uniqueness for 8-length strings\n" do
-    string_length = 8
-    sample_size = 100000
-    assert pct_uniq(string_length, sample_size) >= 99.999
+    assert pct_uniq(8, 100000) >= 99.999
   end
 end
