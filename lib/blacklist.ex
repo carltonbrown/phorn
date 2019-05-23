@@ -3,9 +3,11 @@ defmodule Blacklist do
 
   @blacklist %{
     :initial => %{
+      ?a => '',
       ?b => 'cbdfgjkmnpqstvxz',
       ?c => 'bcdfgjkmpqstvwxy',
       ?d => 'bdcfgkmpqstxz',
+      ?e => '',
       ?f => 'bcdghkmpqstvxz',
       ?g => 'bcfgkmpqstvxz',
       ?h => 'bcdfghjkpqtvwxz',
@@ -15,6 +17,7 @@ defmodule Blacklist do
       ?l => 'bcdfgjkmnpqrstvwxz',
       ?m => 'cdfgjkmqtvxz',
       ?n => 'cfghklmnpqtx',
+      ?o => '',
       ?p => 'bcdgjkmpqvxz',
       ?q => 'bcdfghjklmnopqrstvwxz',
       ?r => 'cgijlprtqwx',
@@ -28,19 +31,24 @@ defmodule Blacklist do
       ?z => 'cfkjpqstvwx'
     } |> Map.new(fn {k, v} -> {k, MapSet.new(v)} end),
     :sequential => %{
+      ?a => '',
       ?b => 'qx',
       ?c => 'x',
       ?d => 'x',
+      ?e => '',
       ?f => 'vx',
       ?g => 'q',
       ?h => 'hqx',
       ?i => 'iwy',
       ?j => 'bcjklpsxz',
       ?k => 'cqx',
+      ?l => '',
       ?m => 'x',
+      ?n => '',
       ?o => 'h',
       ?p => 'bx',
       ?q => 'acghjkoquwxy',
+      ?r => '',
       ?s => 'x',
       ?t => 'x',
       ?u => 'w',
@@ -51,36 +59,37 @@ defmodule Blacklist do
       ?z => 'jsx'
     } |> Map.new(fn {k, v} -> {k, MapSet.new(v)} end),
     :final => %{
-      ?b => 'cjkpwv',
-      ?c => 'bgjnqwv',
-      ?d => 'ckj',
-      ?f => 'bdvwz',
+      ?a => '',
+      ?b => 'cjkpqwxv',
+      ?c => 'bgjnqwxv',
+      ?d => 'ckjx',
+      ?e => '',
+      ?f => 'bdvwxz',
       ?g => 'bfpqw',
-      ?h => 'dwy',
-      ?i => 'wy',
-      ?k => 'bcgjnpqw',
+      ?h => 'dhqxwy',
+      ?i => 'iwy',
+      ?j => '',
+      ?k => 'bcgjnpqwx',
       ?l => 'w',
-      ?m => 'gjw',
+      ?m => 'gjwx',
       ?n => 'bjpw',
-      ?j => 'bcfgmnpqsvwxz',
-      ?p => 'gjqv',
-      ?q => 'abcdegjkmnopqtuvwxz',
-      ?s => 'bdjv',
-      ?t => 'cdgp',
-      ?u => 'y',
-      ?v => 'bcfpqvw',
-      ?w => 'bghjrqv',
+      ?o => '',
+      ?j => 'bcfghmnpqsvwxz',
+      ?p => 'bgjqvx',
+      ?q => 'abcdeghjkmnopqtuvwxyz',
+      ?r => '',
+      ?s => 'bdjvx',
+      ?t => 'cdgpx',
+      ?u => 'wy',
+      ?v => 'bcfpqsvwx',
+      ?w => 'bghjrqvx',
       ?x => 'bcdefgjkpqsvwxz',
-      ?y => 'chwxy',
-      ?z => 's'
+      ?y => 'chiqwxy',
+      ?z => 'jsx'
     } |> Map.new(fn {k, v} -> {k, MapSet.new(v)} end)
   }
 
-  def get(rule, char) when rule in [:initial, :sequential] do
-    @blacklist[rule][char] || MapSet.new('')
-  end
-
-  def get(:final, char) do
-    MapSet.union(get(:sequential, char),@blacklist[:final][char] || MapSet.new(''))
+  def get(rule, char) when rule in [:initial, :sequential, :final] do
+    @blacklist[rule][char]
   end
 end
