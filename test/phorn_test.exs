@@ -27,12 +27,22 @@ defmodule PhornTest do
     assert Phorn.position_at('nnn', 4) == :final
   end
 
-  test "meets percent uniq" do
-    count = 500000
+  @tag :skip
+  test "greater than 99.999% unique for 9-length strings\n" do
+    sample_size = 500000
     inspect_every = 5000
-    phorns = Phorn.bulk_gen(9, count, [], inspect_every)
+    phorns = Phorn.bulk_gen(9, sample_size, [], inspect_every)
     pct_uniq = 100 * (length(Enum.uniq(phorns)) / length(phorns))
-    IO.puts "Percent uniq is #{pct_uniq}"
+    IO.puts "\n#{pct_uniq}% unique over #{sample_size} iterations"
+    assert pct_uniq >= 99.999
+  end
+
+  test "greater than 99.998% unique for 8-length strings\n" do
+    sample_size = 50000
+    inspect_every = 5000
+    phorns = Phorn.bulk_gen(8, sample_size, [], inspect_every)
+    pct_uniq = 100 * (length(Enum.uniq(phorns)) / length(phorns))
+    IO.puts "\n#{pct_uniq}% unique over #{sample_size} iterations"
     assert pct_uniq >= 99.999
   end
 end
