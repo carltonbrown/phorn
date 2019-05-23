@@ -27,22 +27,24 @@ defmodule PhornTest do
     assert Phorn.position_at('nnn', 4) == :final
   end
 
-  @tag :skip
-  test "greater than 99.999% unique for 9-length strings\n" do
-    sample_size = 500000
-    inspect_every = 5000
-    phorns = Phorn.bulk_gen(9, sample_size, [], inspect_every)
-    pct_uniq = 100 * (length(Enum.uniq(phorns)) / length(phorns))
-    IO.puts "\n#{pct_uniq}% unique over #{sample_size} iterations"
-    assert pct_uniq >= 99.999
+  def pct_uniq(string_length, sample_size, inspect_every \\ 5000) do 
+    IO.puts "\n"
+    phorns = Phorn.bulk_gen(string_length, sample_size, [], inspect_every)
+    result = 100 * (length(Enum.uniq(phorns)) / length(phorns))
+    IO.puts "\n#{result}% unique over #{sample_size} iterations"
+    result
   end
 
-  test "greater than 99.998% unique for 8-length strings\n" do
-    sample_size = 50000
-    inspect_every = 5000
-    phorns = Phorn.bulk_gen(8, sample_size, [], inspect_every)
-    pct_uniq = 100 * (length(Enum.uniq(phorns)) / length(phorns))
-    IO.puts "\n#{pct_uniq}% unique over #{sample_size} iterations"
-    assert pct_uniq >= 99.999
+  @tag :skip
+  test "uniqueness for 9-length strings\n" do
+    string_length = 9
+    sample_size = 500000
+    assert pct_uniq(string_length, sample_size) >= 99.999
+  end
+
+  test "uniqueness for 8-length strings\n" do
+    string_length = 8
+    sample_size = 100000
+    assert pct_uniq(string_length, sample_size) >= 99.999
   end
 end
