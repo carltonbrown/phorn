@@ -8,20 +8,14 @@ defmodule Phorn do
     :ok
   end
 
-  def charset(:all) do
-    MapSet.new(?a..?z)
-  end
-
-  def charset(:vowels) do
-    MapSet.new('aeiouy')
-  end
-
-  def charset(:consonants) do
-    MapSet.difference(charset(:all), charset(:vowels))
-  end
+  @charset %{ 
+    :alphas => MapSet.new(?a..?z),
+    :vowels => MapSet.new('aeiouy'),
+    :consonants => MapSet.new('bcdfghjklmnpqrstvwxz')
+  }
 
   def reversed(maxlen) do
-    acc = [Enum.random(charset(:all))]
+    acc = [Enum.random(@charset[:alphas])]
     get_chars(acc, maxlen, length(acc))
   end
 
@@ -47,8 +41,8 @@ defmodule Phorn do
     # If last n chars contain n vowels, next should be a consonant
     n = 2 
     last_n = Enum.slice(acc,0..n-1)
-    num_vowels = length(Enum.filter(last_n, fn x -> Enum.member?(charset(:vowels), x) end))
-    num_consonants = length(Enum.filter(last_n, fn x -> Enum.member?(charset(:consonants), x) end))
+    num_vowels = length(Enum.filter(last_n, fn x -> Enum.member?(@charset[:vowels], x) end))
+    num_consonants = length(Enum.filter(last_n, fn x -> Enum.member?(@charset[:consonants], x) end))
     rule = position_at(acc, maxlen)
     kind = cond do
       num_vowels >= n ->
@@ -56,7 +50,7 @@ defmodule Phorn do
       num_consonants >= n ->
         :vowels
       num_vowels < 2 && num_consonants < 2 ->
-        :all
+        :alphas
     end
     next = follows(current, rule, kind) 
     acc = [ next | acc ]
@@ -80,7 +74,7 @@ defmodule Phorn do
 
   # when pos in :initial, sequential, final
   def follows(preceding, rule, kind_requested) do
-    superset = charset(kind_requested)
+    superset = @charset[kind_requested]
     blacklist = Blacklist.get(rule, preceding)
     allowed = MapSet.difference(superset, blacklist)
     Enum.random(allowed)
