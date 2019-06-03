@@ -7,7 +7,8 @@ defmodule Phorn.MixProject do
       version: "0.1.0",
       elixir: "~> 1.8",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package()
     ]
   end
 
@@ -21,8 +22,15 @@ defmodule Phorn.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:number, "~> 1.0.0"},
-      {:exprof, "~> 0.2.3"},
+      {:exprof, "~> 0.2.3"}
+    ]
+  end
+
+  defp package() do
+    [
+      description:  "Algorithmic fake word generator",
+      licenses: [ "GPL-3.0-only" ],
+      links: %{"GitHub" => "https://github.com/carltonbrown/phorn"}
     ]
   end
 end
