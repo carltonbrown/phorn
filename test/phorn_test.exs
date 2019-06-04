@@ -29,7 +29,7 @@ defmodule PhornTest do
 
   def pct_uniq(spec, sample_size, inspect_every \\ 50000) do 
     IO.puts "\n"
-    uniq = Phorn.bulk_tuple(spec, sample_size, MapSet.new([]), inspect_every)
+    uniq = Phorn.bulk_gen(spec, sample_size, MapSet.new([]), inspect_every)
     result = 100 * uniq / sample_size
     IO.puts "\n#{result}% unique over #{sample_size} iterations"
     result
@@ -44,7 +44,6 @@ defmodule PhornTest do
     assert pct_uniq([9], 1_000_000) >= 99.998
   end
 
-  @tag :skip
   test "uniqueness for hexa-septutples\n" do
     assert pct_uniq([5,6], 10_000_000) >= 99.99998
   end

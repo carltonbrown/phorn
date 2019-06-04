@@ -88,34 +88,18 @@ defmodule Phorn do
     Enum.random(allowed)
   end
 
-  def bulk_tuple(spec, count, cumulative, inspect_every \\ 1000)
+  def bulk_gen(spec, count, cumulative, inspect_every \\ 1000)
 
-  def bulk_tuple(spec, count, cumulative, inspect_every) when count > 0 do
+  def bulk_gen(spec, count, cumulative, inspect_every) when count > 0 do
     next = tuple(spec, [])
     cumulative = MapSet.put(cumulative, next)
     if rem(MapSet.size(cumulative),inspect_every) == 0 do
       IO.puts "#{MapSet.size(cumulative)} #{next}"
     end
-    bulk_tuple(spec, count-1, cumulative, inspect_every)
+    bulk_gen(spec, count-1, cumulative, inspect_every)
   end
 
-  def bulk_tuple(spec, count, cumulative, _) when count <= 0 do
-    MapSet.size(cumulative)
-  end
-
-  def bulk_gen(maxlen, count, cumulative, inspect_every \\ 1000)
-
-  def bulk_gen(maxlen, count, cumulative, inspect_every) when count > 0 do
-    next = reversed(maxlen)
-    cumulative = MapSet.put(cumulative, next)
-    if rem(MapSet.size(cumulative),inspect_every) == 0 do
-      displayed = to_string(Enum.reverse(next))
-      IO.puts "#{MapSet.size(cumulative)} #{displayed}"
-    end
-    bulk_gen(maxlen, count-1, cumulative, inspect_every)
-  end
-
-  def bulk_gen(maxlen, count, cumulative, _) when count <= 0 do
+  def bulk_gen(_, count, cumulative, _) when count <= 0 do
     MapSet.size(cumulative)
   end
 end
