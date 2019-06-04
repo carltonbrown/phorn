@@ -35,6 +35,7 @@ defmodule PhornTest do
     result
   end
 
+  @tag :skip
   test "uniqueness for 8-length strings\n" do
     assert pct_uniq([8], 1_000_000) >= 99.998
   end

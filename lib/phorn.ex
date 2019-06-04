@@ -70,6 +70,8 @@ defmodule Phorn do
     Enum.join(tuples, "-")
   end
 
+  def tuple(spec, tuples \\ [])
+
   def tuple(spec, tuples) when length(spec) > 0 do
     [ nextlen | spec ] = spec
     tuples = [ string(nextlen) | tuples ]
@@ -91,7 +93,7 @@ defmodule Phorn do
   def bulk_gen(spec, count, cumulative, inspect_every \\ 1000)
 
   def bulk_gen(spec, count, cumulative, inspect_every) when count > 0 do
-    next = tuple(spec, [])
+    next = tuple(spec)
     cumulative = MapSet.put(cumulative, next)
     if rem(MapSet.size(cumulative),inspect_every) == 0 do
       IO.puts "#{MapSet.size(cumulative)} #{next}"
