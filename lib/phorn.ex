@@ -61,8 +61,6 @@ defmodule Phorn do
      acc
   end
 
-  def tuple(tuple_count, tuple_size, tuples \\ [])
-
   def tuple(tuple_count, tuple_size, tuples) when tuple_count > 0 do
     tuples = [ string(tuple_size) | tuples ]
     tuple(tuple_count-1, tuple_size, tuples)
@@ -72,12 +70,37 @@ defmodule Phorn do
     Enum.join(tuples, "-")
   end
 
+  def tuple(spec, tuples) when length(spec) > 0 do
+    [ nextlen | spec ] = spec
+    tuples = [ string(nextlen) | tuples ]
+    tuple(spec, tuples)
+  end
+
+  def tuple(spec, tuples) when length(spec) < 1 do
+    Enum.join(Enum.reverse(tuples), "-")
+  end
+
   # when pos in :initial, sequential, final
   def follows(preceding, rule, kind_requested) do
     superset = @charset[kind_requested]
     blacklist = Blacklist.get(rule, preceding)
     allowed = MapSet.difference(superset, blacklist)
     Enum.random(allowed)
+  end
+
+  def bulk_tuple(spec, count, cumulative, inspect_every \\ 1000)
+
+  def bulk_tuple(spec, count, cumulative, inspect_every) when count > 0 do
+    next = tuple(spec, [])
+    cumulative = MapSet.put(cumulative, next)
+    if rem(MapSet.size(cumulative),inspect_every) == 0 do
+      IO.puts "#{MapSet.size(cumulative)} #{next}"
+    end
+    bulk_tuple(spec, count-1, cumulative, inspect_every)
+  end
+
+  def bulk_tuple(spec, count, cumulative, _) when count <= 0 do
+    MapSet.size(cumulative)
   end
 
   def bulk_gen(maxlen, count, cumulative, inspect_every \\ 1000)
