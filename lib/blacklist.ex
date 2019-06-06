@@ -60,7 +60,7 @@ defmodule Blacklist do
     } |> Map.new(fn {k, v} -> {k, MapSet.new(v)} end),
     :final => %{
       ?a => '',
-      ?b => 'cjkjpqwxv',
+      ?b => 'cdjkjpqwxv',
       ?c => 'bgjnqwxv',
       ?d => 'ckjqvx',
       ?e => '',
@@ -77,7 +77,7 @@ defmodule Blacklist do
       ?j => 'bcfghmnpqsvwxz',
       ?p => 'bgjqvwx',
       ?q => 'abcdeghjkmnopqtuvwxyz',
-      ?r => '',
+      ?r => 'w',
       ?s => 'bdjvx',
       ?t => 'cdgjkpx',
       ?u => 'wy',
