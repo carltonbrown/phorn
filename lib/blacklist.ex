@@ -21,7 +21,7 @@ defmodule Blacklist do
       ?p => 'bcdgjkmpqvxz',
       ?q => 'bcdfghjklmnopqrstvwxz',
       ?r => 'cgijlprtqwx',
-      ?s => 'dsqx',
+      ?s => 'dsqxy',
       ?t => 'cdfgpqtx',
       ?u => 'y',
       ?v => 'bcdfgjklmnpqstvwxz',
