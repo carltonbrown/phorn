@@ -43,6 +43,7 @@ defmodule PhornTest do
     assert pct_uniq([9], 1_000_000) >= 99.998
   end
 
+  # This one takes a few hours to run
   @tag :skip
   test "uniqueness for multiples\n" do
     assert pct_uniq([3,5,6], 100_000_000) >= 100
