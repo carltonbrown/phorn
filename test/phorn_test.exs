@@ -45,7 +45,7 @@ defmodule PhornTest do
     assert pct_uniq([9], 1_000_000) >= 99.998
   end
 
-  test "uniqueness for hexa-septutples\n" do
+  test "uniqueness for penta-sextuples\n" do
     assert pct_uniq([5,6], 10_000_000) >= 99.9995
   end
 end
