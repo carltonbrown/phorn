@@ -93,6 +93,7 @@ defmodule Phorn do
   def bulk_gen(spec, count, cumulative, inspect_every \\ 1000)
 
   def bulk_gen(spec, count, cumulative, inspect_every) when count > 0 do
+    spec = Enum.shuffle(spec)
     next = tuple(spec)
     cumulative = MapSet.put(cumulative, next)
     if rem(MapSet.size(cumulative),inspect_every) == 0 do
