@@ -35,16 +35,22 @@ defmodule PhornTest do
     result
   end
 
+  @tag :skip
   test "uniqueness for 8-length strings\n" do
     assert pct_uniq([8], 1_000_000) >= 99.98
   end
 
+  @tag :skip
   test "uniqueness for 9-length strings\n" do
     assert pct_uniq([9], 1_000_000) >= 99.998
   end
 
-  # This one takes a few hours to run
+  test "uniqueness for 10-length strings\n" do
+    assert pct_uniq([10], 10_000_000) >= 99.999
+  end
+
   @tag :skip
+  # This one takes a few hours to run
   test "uniqueness for multiples\n" do
     assert pct_uniq([3,5,6], 100_000_000) >= 100
   end
