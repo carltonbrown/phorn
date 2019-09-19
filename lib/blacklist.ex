@@ -65,7 +65,7 @@ defmodule Blacklist do
       ?d => 'ckjqvx',
       ?e => '',
       ?f => 'bdjvwxz',
-      ?g => 'bfjkpqwx',
+      ?g => 'bcfjkpqwx',
       ?h => 'dhjqxwy',
       ?i => 'iwy',
       ?j => 'bcfghkmnpqsvwxz',
