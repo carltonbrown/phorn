@@ -40,7 +40,7 @@ defmodule Blacklist do
       ?g => 'q',
       ?h => 'hqx',
       ?i => 'iwy',
-      ?j => 'klpsxz',
+      ?j => 'jklpsxz',
       ?k => 'cqx',
       ?l => '',
       ?m => 'x',
