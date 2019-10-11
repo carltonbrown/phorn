@@ -55,7 +55,7 @@ defmodule Blacklist do
       ?v => 'cvx',
       ?w => 'qx',
       ?x => 'gsz',
-      ?y => 'aeiouwy',
+      ?y => 'aeioquwy',
       ?z => 'x'
     } |> Map.new(fn {k, v} -> {k, MapSet.new(v)} end),
     :final => %{
