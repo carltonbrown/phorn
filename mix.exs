@@ -22,7 +22,6 @@ defmodule Phorn.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:exprof, "~> 0.2.3"}
     ]
   end
 
